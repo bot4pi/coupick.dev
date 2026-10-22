@@ -1,0 +1,10 @@
+/*
+ * always absolutely positioned inside a sized, `position: relative` parent: an in-flow canvas whose
+ * height doesn't resolve falls back to its pixel size, and resizing it would make it grow forever
+ */
+.ascii-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

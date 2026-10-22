@@ -1,0 +1,46 @@
+.not-found {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.ascii-canvas.not-found-field {
+  position: fixed;
+  inset: 0;
+}
+
+.not-found-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  padding-top: 120px;
+  padding-bottom: max(64px, env(safe-area-inset-bottom));
+
+  text-align: center;
+  background: linear-gradient(to bottom, transparent, var(--bg) 45%);
+}
+
+.not-found-title {
+  max-width: 100%;
+  font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
+}
+
+.not-found-title .mono {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.not-found-sub {
+  margin-bottom: 16px;
+  color: var(--text-2);
+}

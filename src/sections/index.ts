@@ -1,0 +1,7 @@
+export * from './Contact'
+export * from './Hero'
+export * from './Nav'
+export * from './Now'
+export * from './Projects'
+export * from './Stack'
+export * from './Support'

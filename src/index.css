@@ -1,0 +1,445 @@
+:root {
+  --bg: #0a0a0a;
+
+  --surface: rgb(255 255 255 / 0.025);
+  --surface-2: rgb(255 255 255 / 0.05);
+  --surface-3: rgb(255 255 255 / 0.085);
+
+  --border: rgb(255 255 255 / 0.08);
+  --border-2: rgb(255 255 255 / 0.14);
+  --border-3: rgb(255 255 255 / 0.24);
+
+  --text: #ededed;
+  --text-2: #a1a1a1;
+  --text-3: #6f6f6f;
+  --text-4: #474747;
+
+  --focus: rgb(255 255 255 / 0.6);
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --container: 1040px;
+  --gutter: 24px;
+  --nav-height: 60px;
+
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 18px;
+  }
+}
+
+html {
+  /* the intro locks scrolling; a stable gutter keeps the layout from shifting when it unlocks */
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + 24px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+code,
+kbd,
+.mono {
+  font-family: var(--font-mono);
+  font-variant-ligatures: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: var(--bg);
+  background: var(--text);
+}
+
+/* --- intro ------------------------------------------------------------------------------- */
+
+html[data-intro='intro'],
+html[data-intro='assembling'] {
+  overflow: hidden;
+}
+
+html[data-intro='intro'] #app {
+  opacity: 0;
+}
+
+/* boxes, borders and pictures fade in while the glyphs fly into the (still invisible) text */
+html[data-intro='assembling'] #app {
+  transition: opacity 900ms var(--ease-out) 150ms;
+}
+
+html[data-intro='assembling'] #app,
+html[data-intro='assembling'] #app * {
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+html.no-transitions *,
+html.no-transitions *::before,
+html.no-transitions *::after {
+  transition: none !important;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+    filter: blur(6px);
+  }
+}
+
+html[data-entry='plain'] #app {
+  animation: page-in 800ms var(--ease-out) both;
+}
+
+/* --- scroll reveal ----------------------------------------------------------------------- */
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 22px;
+    filter: blur(8px);
+  }
+}
+
+[data-reveal='pending'] {
+  opacity: 0;
+}
+
+[data-reveal='shown'] {
+  animation: reveal 900ms var(--ease-out) var(--reveal-delay, 0ms) both;
+}
+
+/* --- layout ------------------------------------------------------------------------------ */
+
+#app {
+  position: relative;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.section {
+  padding-top: 88px;
+}
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 620px;
+  margin-bottom: 28px;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-3);
+  font-variant-ligatures: none;
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 1.3rem + 1.6vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.section-sub {
+  font-size: 1rem;
+  color: var(--text-2);
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding-top: 72px;
+  }
+
+  .section-head {
+    margin-bottom: 24px;
+  }
+}
+
+/* --- cards ------------------------------------------------------------------------------- */
+
+.card {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+/* a soft light that follows the pointer, plus a brighter rim on the border near it */
+.spot::before,
+.spot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.spot::before {
+  background: radial-gradient(420px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgb(255 255 255 / 0.055), transparent 45%);
+}
+
+.spot::after {
+  z-index: 2;
+  padding: 1px;
+  background: radial-gradient(260px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgb(255 255 255 / 0.4), transparent 50%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+@media (hover: hover) {
+  .spot:hover::before,
+  .spot:hover::after {
+    opacity: 1;
+  }
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-3);
+  font-variant-ligatures: none;
+}
+
+.card-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-2);
+}
+
+.card-label svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* --- buttons ----------------------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+
+  color: var(--text);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border-2);
+
+  transition:
+    background 200ms ease,
+    box-shadow 200ms ease,
+    transform 300ms var(--ease-out);
+}
+
+.button:hover {
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--border-3);
+}
+
+.button:active {
+  transform: scale(0.97);
+}
+
+.button svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.button-primary {
+  color: var(--bg);
+  background: var(--text);
+  box-shadow: none;
+}
+
+.button-primary:hover {
+  background: #fff;
+  box-shadow: none;
+}
+
+/* --- tooltips: <span class='with-note' data-note='...'> -------------------------------- */
+
+.with-note {
+  position: relative;
+}
+
+.with-note[data-note]::after {
+  content: attr(data-note);
+
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  z-index: 30;
+
+  width: max-content;
+  max-width: min(260px, 80vw);
+  padding: 6px 9px;
+  border-radius: 8px;
+
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: var(--text);
+
+  background: #161616;
+  box-shadow:
+    inset 0 0 0 1px var(--border-2),
+    0 8px 24px rgb(0 0 0 / 0.5);
+
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) translateY(4px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.with-note[data-note]:hover::after,
+.with-note[data-note]:focus::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* --- bits -------------------------------------------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--text-3);
+}
+
+.spinner {
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+}
+
+@keyframes shimmer {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.shimmer {
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html[data-entry='plain'] #app,
+  [data-reveal='shown'],
+  .shimmer {
+    animation: none;
+  }
+}

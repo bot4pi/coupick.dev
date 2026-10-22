@@ -1,0 +1,223 @@
+.support {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 24px;
+}
+
+.support-text {
+  max-width: 680px;
+  color: var(--text-2);
+}
+
+.support-text b {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.support-row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+}
+
+.support-row-label {
+  padding-top: 9px;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-3);
+}
+
+/* chips stretch so every row runs the full width of the card */
+.support-wallets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.support-wallets > .wallet {
+  flex: 1 1 190px;
+}
+
+.support-note {
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+@media (max-width: 560px) {
+  .support {
+    padding: 20px;
+  }
+
+  .support-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .support-row-label {
+    padding-top: 0;
+  }
+}
+
+/* --- wallet chip ------------------------------------------------------------------------- */
+
+.wallet {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.wallet-chip,
+.wallet-qr-toggle {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text-2);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border);
+
+  transition:
+    color 200ms ease,
+    background 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.wallet-chip {
+  flex: 1;
+  gap: 8px;
+  min-width: 0;
+  padding: 0 12px 0 8px;
+  border-radius: 999px 0 0 999px;
+}
+
+.wallet-qr-toggle {
+  justify-content: center;
+  padding: 0 10px 0 8px;
+  border-radius: 0 999px 999px 0;
+  margin-left: 1px;
+}
+
+.wallet-chip:hover,
+.wallet-qr-toggle:hover {
+  color: var(--text);
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--border-2);
+}
+
+.wallet-chip:focus,
+.wallet-qr-toggle:focus {
+  outline: none;
+}
+
+.wallet-chip:focus-visible,
+.wallet-qr-toggle:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--focus);
+}
+
+/* coins stay grey until you point at them */
+.wallet-coin {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  filter: grayscale(1) brightness(1.3);
+  opacity: 0.8;
+  transition:
+    filter 300ms ease,
+    opacity 300ms ease;
+}
+
+.wallet:hover .wallet-coin {
+  filter: none;
+  opacity: 1;
+}
+
+.wallet-label {
+  margin-left: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.wallet-chip > svg,
+.wallet-qr-toggle > svg {
+  flex: none;
+  opacity: 0.6;
+}
+
+@keyframes wallet-copied {
+  from {
+    background: rgb(255 255 255 / 0.2);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.5);
+  }
+}
+
+.wallet-chip-copied {
+  color: var(--text);
+  animation: wallet-copied 1200ms ease;
+}
+
+.wallet-qr-toggle-open {
+  color: var(--text);
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--border-3);
+}
+
+.wallet-qr-toggle-open > svg {
+  opacity: 1;
+}
+
+@keyframes wallet-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+}
+
+.wallet-qr-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px;
+  border-radius: 14px;
+  background: #141414;
+  box-shadow:
+    inset 0 0 0 1px var(--border-2),
+    0 16px 40px rgb(0 0 0 / 0.6);
+
+  animation: wallet-pop 250ms var(--ease-out);
+}
+
+.wallet-qr {
+  width: 160px;
+  height: 160px;
+  border-radius: 8px;
+}
+
+.wallet-qr-loading {
+  display: block;
+  background: var(--surface-2);
+}
+
+.wallet-qr-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+}

@@ -1,0 +1,69 @@
+.skill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text-2);
+  text-decoration: none;
+
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border);
+
+  cursor: default;
+
+  transition:
+    color 200ms ease,
+    background 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.skill[data-note]:hover,
+.skill[data-note]:focus-visible,
+a.skill:hover {
+  color: var(--text);
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--border-2);
+}
+
+.skill:focus-visible {
+  outline: none;
+}
+
+a.skill {
+  cursor: pointer;
+}
+
+.skill svg {
+  width: 13px;
+  height: 13px;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.skill-detail {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.skill-disliked {
+  color: var(--text-3);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--text-3);
+}
+
+/* the one thing on the page allowed to glow */
+.skill-loved {
+  color: var(--text);
+  background: rgb(255 255 255 / 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.22),
+    0 0 18px rgb(255 255 255 / 0.08);
+  text-shadow: 0 0 12px rgb(255 255 255 / 0.55);
+}

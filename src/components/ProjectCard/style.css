@@ -1,0 +1,130 @@
+.project {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+
+  transition: transform 500ms var(--ease-out);
+}
+
+a.project:active {
+  transform: scale(0.99);
+}
+
+.project-cover {
+  position: relative;
+  height: 160px;
+  flex: none;
+  border-bottom: 1px solid var(--border);
+  background: rgb(255 255 255 / 0.015);
+
+  /* let the glyphs melt into the card instead of ending at a hard edge */
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+
+.project-featured .project-cover {
+  height: 210px;
+}
+
+.project-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 20px 20px;
+}
+
+.project-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.project-name {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.project-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-3);
+}
+
+.project-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.project-status-current,
+.project-status-live,
+.project-status-open-source {
+  color: var(--text-2);
+}
+
+.project-status-current::before,
+.project-status-live::before {
+  background: var(--text);
+  box-shadow: 0 0 8px rgb(255 255 255 / 0.6);
+}
+
+.project-status-invite-only {
+  color: var(--text-2);
+}
+
+.project-status-private::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+
+.project-link {
+  display: inline-flex;
+  margin-left: auto;
+  color: var(--text-3);
+  transition:
+    color 200ms ease,
+    transform 400ms var(--ease-out);
+}
+
+a.project:hover .project-link {
+  color: var(--text);
+  transform: translate(2px, -2px);
+}
+
+.project-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.project-desc i {
+  color: var(--text);
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 8px;
+
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-3);
+}
+
+.project-tags li {
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: var(--surface-2);
+}

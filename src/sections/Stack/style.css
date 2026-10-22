@@ -1,0 +1,146 @@
+.stack-core {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.stack-core > li {
+  display: flex;
+}
+
+.stack-tile {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px;
+}
+
+.stack-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+
+  color: var(--text);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border);
+
+  transition: transform 500ms var(--ease-out);
+}
+
+.stack-tile:hover .stack-icon {
+  transform: translateY(-2px) rotate(-6deg);
+}
+
+.stack-name {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.stack-note {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-3);
+}
+
+.stack-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 20px;
+}
+
+.stack-box-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.stack-box-head,
+.stack-facts dt {
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-3);
+}
+
+.stack-box-hint {
+  font-size: 11px;
+  color: var(--text-4);
+}
+
+.stack-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* speaks / loves / dislikes flow side by side under a hairline and wrap when they run out of room */
+.stack-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.stack-facts > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stack-facts-wide {
+  flex-basis: 100%;
+}
+
+.stack-facts dd.stack-facts-text {
+  display: block;
+  font-size: 14px;
+  line-height: 2;
+  color: var(--text-2);
+}
+
+.stack-facts-text .skill {
+  height: 26px;
+  margin: 0 2px;
+  vertical-align: middle;
+}
+
+.bleep-symbol {
+  display: inline-block;
+  width: 0.62em;
+  text-align: center;
+  color: var(--text);
+}
+
+.stack-facts dd {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .stack-core {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stack-facts {
+    gap: 16px 24px;
+  }
+}
+
+@media (max-width: 420px) {
+  .stack-tile {
+    padding: 16px;
+  }
+
+  .stack-icon {
+    margin-bottom: 14px;
+  }
+}
