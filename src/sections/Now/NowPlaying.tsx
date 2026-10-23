@@ -27,7 +27,7 @@ const Equalizer = ({ playing }: { playing: boolean }) => (
   </span>
 )
 
-// the cover is drawn in glyphs; pointing at it shows the real artwork
+// the cover is drawn in glyphs painted in its own colors; pointing at it shows the real artwork
 const Cover = ({ track }: { track: Track }) => {
   const [ascii, setAscii] = useState(false)
   const image = track.album.image
@@ -44,17 +44,17 @@ const Cover = ({ track }: { track: Track }) => {
         <>
           <AsciiCanvas
             image={[image]}
-            cellWidth={5}
-            cellHeight={10}
-            fontSize={8}
-            intensity={0.06}
-            threshold={0.35}
-            scale={0.4}
+            cellWidth={4}
+            cellHeight={8}
+            fontSize={7}
+            intensity={0}
             wordIntensity={1}
-            imageGamma={1.2}
+            imageGamma={0.75}
+            tint
+            underlay={0.22}
             onReady={() => setAscii(true)}
           />
-          <img src={image} alt='' width={152} height={152} />
+          <img src={image} alt='' width={232} height={232} />
         </>
       )}
     </a>
@@ -66,26 +66,28 @@ const TrackView = ({ track, fetchedAt }: { track: Track, fetchedAt: number }) =>
   const share = track.durationMs > 0 ? progress / track.durationMs : 0
 
   return (
-    <>
-      <div class='np-track'>
-        <Cover key={track.album.image} track={track} />
+    <div class='np-track'>
+      <Cover key={track.album.image} track={track} />
 
-        <div class='np-meta'>
-          <a class='np-name' href={track.url} target='_blank' rel='noopener noreferrer'>{track.name}</a>
-          <span class='np-artist'>{artistsOf(track)}</span>
-          <span class='np-album'>{track.album.name}</span>
+      <div class='np-meta'>
+        <a class='np-name' href={track.url} target='_blank' rel='noopener noreferrer'>{track.name}</a>
+        <span class='np-artist'>{artistsOf(track)}</span>
+        <span class='np-album'>{track.album.name}</span>
+
+        <div class='np-player'>
           <Equalizer playing={track.playing} />
+
+          <span class='np-bar'>
+            <span class='np-bar-fill' style={{ transform: `scaleX(${share})` }} />
+          </span>
+
+          <span class='np-times mono'>
+            <span>{formatTime(progress)}</span>
+            <span>{formatTime(track.durationMs)}</span>
+          </span>
         </div>
       </div>
-
-      <div class='np-progress'>
-        <span class='np-time mono'>{formatTime(progress)}</span>
-        <span class='np-bar'>
-          <span class='np-bar-fill' style={{ transform: `scaleX(${share})` }} />
-        </span>
-        <span class='np-time mono'>{formatTime(track.durationMs)}</span>
-      </div>
-    </>
+    </div>
   )
 }
 

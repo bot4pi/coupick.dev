@@ -1,0 +1,16 @@
+/* above the page, under the nav, and never in the way of the pointer */
+@keyframes snow-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.snow {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: snow-in 2s ease both;
+}

@@ -61,6 +61,11 @@ export const Footer = () => (
     <div class='container footer-bar'>
       <span>© {__BUILD_DATE__.slice(0, 4)} coup</span>
       <span class='footer-built mono'>built {__BUILD_DATE__.slice(0, 10)}</span>
+      <a class='footer-sources' href='https://github.com/bot4pi/coupick.dev' target='_blank' rel='noopener noreferrer'>
+        <BrandIcon icon={siGithub} size='13px' />
+        sources
+        <IconArrowUpRight size='12px' />
+      </a>
       <button type='button' class='footer-replay' onClick={playIntro}>
         <IconReplay size='14px' />
         replay the intro

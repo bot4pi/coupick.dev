@@ -20,6 +20,9 @@ the idle spotify card, the footer and the 404 page) is one small engine in [`src
 
 the intro plays once per tab session. `?intro` forces it, `prefers-reduced-motion` skips it.
 
+in december it snows over the page (glyphs again, of course). it's the visitor's own calendar, so nothing
+on the server is involved; `?snow` shows it any other month.
+
 ## running
 
 ```sh

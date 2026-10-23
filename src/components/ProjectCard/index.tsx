@@ -2,7 +2,7 @@ import type { ComponentChildren } from 'preact'
 
 import { AsciiCanvas } from '../AsciiCanvas'
 import { Scramble } from '../Scramble'
-import { IconArrowUpRight, IconLock } from '../../shared'
+import { IconArrowUpRight, IconLock, useMediaQuery } from '../../shared'
 
 import './style.css'
 
@@ -20,12 +20,16 @@ export interface Project {
 // a featured card is as wide as the grid, so its cover has room for the whole name
 export const ProjectCard = ({ project: p, featured = false }: { project: Project, featured?: boolean }) => {
   const className = `card spot project${featured ? ' project-featured' : ''}`
+  // on a phone even the featured cover is too narrow for a whole word
+  const wide = useMediaQuery('(min-width: 721px)')
+  const word = featured && wide ? p.name : p.monogram
 
   const body = (
     <>
       <div class='project-cover'>
         <AsciiCanvas
-          word={featured ? p.name : p.monogram}
+          key={word}
+          word={word}
           cellWidth={5}
           cellHeight={10}
           fontSize={8}

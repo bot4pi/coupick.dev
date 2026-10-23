@@ -1,4 +1,4 @@
-import { AsciiCanvas } from '../components'
+import { AsciiCanvas, Snow } from '../components'
 import { ContactSection, Footer, Hero, Nav, NowSection, ProjectsSection, StackSection, SupportSection } from '../sections'
 import { IconArrowLeft, useNowPlaying, useReveal, useSpotlight } from '../shared'
 
@@ -24,6 +24,7 @@ export const MainPage = () => {
       </main>
 
       <Footer />
+      <Snow />
     </>
   )
 }

@@ -48,6 +48,10 @@ export interface FieldOptions {
   image?: HTMLImageElement
   // > 1 pushes the picture's midtones down, so only its highlights stay bright
   imageGamma?: number
+  // paint the glyphs in the picture's own colors instead of plain white
+  tint?: boolean
+  // the real picture drawn faintly under the glyphs (0..1), so a busy picture still reads
+  underlay?: number
   pointerRadius?: number
 }
 
@@ -109,6 +113,9 @@ export class AsciiField {
   // the word mask spread out a few cells: noise is kept away from the letters so they read
   private halo: Float32Array | null = null
 
+  // where the picture sits in the field (css px), once it is fitted
+  private imageRect: { x: number, y: number, width: number, height: number } | null = null
+
   private readonly atlas = document.createElement('canvas')
   private glyphWidth = 0
   private glyphHeight = 0
@@ -127,6 +134,8 @@ export class AsciiField {
       wordHeight: 0.5,
       wordY: 0.5,
       imageGamma: 1.4,
+      tint: false,
+      underlay: 0,
       pointerRadius: 150,
       ...options,
       word: options.word ?? null,
@@ -334,6 +343,19 @@ export class AsciiField {
       return
     }
 
+    const { image, tint, underlay } = this.options
+    const rect = this.imageRect
+    const placeImage = () => {
+      if (image !== null && rect !== null) {
+        ctx.drawImage(image, rect.x * dpr, rect.y * dpr, rect.width * dpr, rect.height * dpr)
+      }
+    }
+
+    if (underlay > 0) {
+      ctx.globalAlpha = underlay
+      placeImage()
+    }
+
     for (let i = 0; i < alpha.length; i++) {
       const a = alpha[i]
 
@@ -349,6 +371,13 @@ export class AsciiField {
     }
 
     ctx.globalAlpha = 1
+
+    // keep the alpha of what is drawn, take the color from the picture
+    if (tint) {
+      ctx.globalCompositeOperation = 'source-atop'
+      placeImage()
+      ctx.globalCompositeOperation = 'source-over'
+    }
   }
 
   // indices of glyphs bright enough to be seen right now
@@ -519,8 +548,10 @@ export class AsciiField {
     const width = image.naturalWidth * cover
     const height = image.naturalHeight * cover
 
+    this.imageRect = { x: (fieldWidth - width) / 2, y: (fieldHeight - height) / 2, width, height }
+
     ctx.scale(sx / this.options.cellWidth, sy / this.options.cellHeight)
-    ctx.drawImage(image, (fieldWidth - width) / 2, (fieldHeight - height) / 2, width, height)
+    ctx.drawImage(image, this.imageRect.x, this.imageRect.y, width, height)
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data
     const mask = new Float32Array(this.cols * this.rows)

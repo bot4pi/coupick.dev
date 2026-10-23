@@ -91,4 +91,20 @@ export const useInView = (ref: RefObject<Element>) => {
   return inView
 }
 
+export const useMediaQuery = (query: string) => {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches)
+
+  useEffect(() => {
+    const list = window.matchMedia(query)
+    const onChange = () => setMatches(list.matches)
+
+    onChange()
+    list.addEventListener('change', onChange)
+
+    return () => list.removeEventListener('change', onChange)
+  }, [query])
+
+  return matches
+}
+
 export { isOnScreen }

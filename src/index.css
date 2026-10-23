@@ -152,8 +152,12 @@ html.no-transitions *::after {
   }
 }
 
+/*
+ * `backwards`, not `both`: a finished animation that keeps filling translate/filter turns #app into the
+ * containing block of every fixed element inside it, and the nav would scroll away with the page
+ */
 html[data-entry='plain'] #app {
-  animation: page-in 800ms var(--ease-out) both;
+  animation: page-in 800ms var(--ease-out) backwards;
 }
 
 /* --- scroll reveal ----------------------------------------------------------------------- */
@@ -171,7 +175,7 @@ html[data-entry='plain'] #app {
 }
 
 [data-reveal='shown'] {
-  animation: reveal 900ms var(--ease-out) var(--reveal-delay, 0ms) both;
+  animation: reveal 900ms var(--ease-out) var(--reveal-delay, 0ms) backwards;
 }
 
 /* --- layout ------------------------------------------------------------------------------ */
