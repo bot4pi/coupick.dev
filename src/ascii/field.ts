@@ -15,6 +15,10 @@ const WAVE_TAIL = 180
 // width of the bright rim on the wave front
 const WAVE_RING = 22
 
+// pings: rings that sweep the field without wiping it, like a sonar looking for something
+const PING_SPEED = 900
+const PING_RING = 30
+
 const OFF_SCREEN = -1e5
 
 // how quickly the light catches up with the pointer, per second: ~0.2s to cover most of the way
@@ -122,6 +126,7 @@ export class AsciiField {
 
   private readonly noise = createNoise3D()
   private wave: { x: number, y: number, start: number } | null = null
+  private pings: { x: number, y: number, start: number }[] = []
   private readonly options: ResolvedOptions
 
   constructor (private readonly ctx: CanvasRenderingContext2D, options: FieldOptions) {
@@ -202,8 +207,21 @@ export class AsciiField {
     this.wave = { x, y, start: now }
   }
 
+  // sends a ring from (x, y) that lights the glyphs up as it passes and leaves the field as it was
+  ping (x: number, y: number, now: number) {
+    this.pings.push({ x, y, start: now })
+  }
+
   update (now: number, dt: number) {
     this.followPointer(dt)
+
+    const reach = Math.hypot(this.width, this.height)
+    const pings = this.pings
+      .map(ping => ({ ...ping, front: ((now - ping.start) / 1000) * PING_SPEED }))
+      .filter(ping => ping.front < reach + PING_RING * 4)
+      .map(ping => ({ ...ping, strength: 1 - Math.min(1, ping.front / reach) * 0.7 }))
+
+    this.pings = this.pings.filter(ping => ((now - ping.start) / 1000) * PING_SPEED < reach + PING_RING * 4)
 
     const { cols, rows, alpha, seed, trail, glyphs, mask, halo, noise, wave, lamp } = this
     const { cellWidth, cellHeight, intensity, threshold, scale, wordIntensity, imageGamma, pointerRadius } = this.options
@@ -304,6 +322,25 @@ export class AsciiField {
             }
 
             if (Math.random() < dt * 24) {
+              glyphs[i] = this.pick(i)
+            }
+          }
+        }
+
+        for (const ping of pings) {
+          const qx = x - ping.x
+          const qy = y - ping.y
+          const ring = (Math.sqrt(qx * qx + qy * qy) - ping.front) / PING_RING
+
+          // a bright front with a short wake fading out behind it
+          if (ring > -4 && ring < 1.5) {
+            const flare = (ring > 0 ? Math.exp(-ring * ring * 2) : Math.exp(ring * 0.8)) * ping.strength * (0.3 + 0.5 * level)
+
+            if (flare > a) {
+              a = flare
+            }
+
+            if (ring > -1 && Math.random() < dt * 30) {
               glyphs[i] = this.pick(i)
             }
           }
