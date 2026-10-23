@@ -408,8 +408,23 @@ export class AsciiField {
     return this.alpha[i]
   }
 
+  cellGlyphIndex (i: number) {
+    return this.glyphs[i]
+  }
+
   get fontSize () {
     return this.options.fontSize
+  }
+
+  get cellSize () {
+    return { width: this.options.cellWidth, height: this.options.cellHeight }
+  }
+
+  // draws one glyph from this field's atlas into a box of the current transform's units
+  drawGlyph (ctx: CanvasRenderingContext2D, index: number, x: number, y: number, width: number, height: number) {
+    const { glyphWidth: gw, glyphHeight: gh } = this
+
+    ctx.drawImage(this.atlas, index * gw, 0, gw, gh, x, y, width, height)
   }
 
   private pick (i: number) {

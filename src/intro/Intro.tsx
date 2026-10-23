@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 
-import { Assembly, collectTargets, useAsciiField, type FieldOptions } from '../ascii'
+import { Assembly, collectCellGoals, collectTargets, useAsciiField, type FieldOptions } from '../ascii'
 
 import { setIntroPhase } from './state'
 
@@ -85,11 +85,13 @@ export const Intro = ({ root, onClose }: IntroProps) => {
 
     const now = performance.now()
     const targets = collectTargets(root)
+    // glyph fields on the page (the portrait) get their own flying glyphs
+    const cells = collectCellGoals()
 
     current.pointer.x = -1e5
     current.pointer.y = -1e5
     current.collapse(x, y, now)
-    assembly.current = new Assembly(targets, current, { x, y }, now)
+    assembly.current = new Assembly(targets, current, { x, y }, now, cells)
 
     root.inert = false
     stageRef.current = 'assembling'

@@ -3,6 +3,21 @@ import { BrandIcon, IconArrowUpRight, siGithub, siTelegram, type NowPlayingState
 
 import './style.css'
 
+// matches the radial css mask on the portrait canvas, so glyphs land as bright as they are drawn
+const portraitFade = (u: number, v: number) => {
+  const d = Math.hypot((u - 0.5) / 0.5, (v - 0.5) / 0.5)
+
+  if (d <= 0.45) {
+    return 1
+  }
+
+  if (d <= 0.72) {
+    return 1 - ((d - 0.45) / 0.27) * 0.5
+  }
+
+  return Math.max(0, 0.5 * (1 - (d - 0.72) / 0.28))
+}
+
 const Avatar = () => (
   <img
     class='hero-avatar'
@@ -75,6 +90,8 @@ export const Hero = ({ nowPlaying }: { nowPlaying: NowPlayingState }) => {
 
         <div class='hero-portrait' aria-hidden='true'>
           <AsciiCanvas
+            class='ascii-assemble'
+            assembleTarget={{ fade: portraitFade }}
             image={['/api/avatar', '/avatar.jpg']}
             cellWidth={5}
             cellHeight={10}

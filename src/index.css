@@ -138,6 +138,12 @@ html[data-intro='assembling'] #app * {
   text-shadow: none !important;
 }
 
+/* glyph fields the intro flies glyphs into stay hidden until those glyphs have landed */
+html[data-intro='intro'] .ascii-assemble,
+html[data-intro='assembling'] .ascii-assemble {
+  opacity: 0;
+}
+
 html.no-transitions *,
 html.no-transitions *::before,
 html.no-transitions *::after {

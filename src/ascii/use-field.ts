@@ -2,6 +2,7 @@ import type { RefObject } from 'preact'
 import { useEffect, useRef } from 'preact/hooks'
 
 import { AsciiField, loadFieldFonts, type FieldOptions } from './field'
+import { cellTargets, type CellTarget } from './targets'
 
 export interface AsciiFieldHookOptions extends Omit<FieldOptions, 'image'> {
   // a picture to draw; the first url that loads wins
@@ -9,6 +10,8 @@ export interface AsciiFieldHookOptions extends Omit<FieldOptions, 'image'> {
   // where the pointer "flashlight" listens: the whole window (for full screen fields) or the canvas
   pointer?: 'window' | 'canvas' | 'none'
   onReady?: (field: AsciiField) => void
+  // the intro flies glyphs into this field instead of letting it simply fade in
+  assembleTarget?: Pick<CellTarget, 'fade'>
   // extra drawing on top of the field; returning `false` freezes the canvas on this frame
   afterDraw?: (ctx: CanvasRenderingContext2D, now: number, dpr: number) => boolean | void
 }
@@ -61,6 +64,7 @@ export const useAsciiField = (ref: RefObject<HTMLCanvasElement>, options: AsciiF
     const pointerMode = latest.current.pointer ?? 'none'
 
     let field: AsciiField | null = null
+    let target: CellTarget | null = null
     let raf = 0
     let last = 0
     let visible = true
@@ -133,6 +137,11 @@ export const useAsciiField = (ref: RefObject<HTMLCanvasElement>, options: AsciiF
       field = new AsciiField(ctx, { ...latest.current, image: image ?? undefined })
       fieldRef.current = field
       resize()
+
+      if (latest.current.assembleTarget !== undefined) {
+        target = { canvas, field, fade: latest.current.assembleTarget.fade }
+        cellTargets.add(target)
+      }
       latest.current.onReady?.(field)
 
       if (still) {
@@ -180,6 +189,11 @@ export const useAsciiField = (ref: RefObject<HTMLCanvasElement>, options: AsciiF
 
     return () => {
       disposed = true
+
+      if (target !== null) {
+        cellTargets.delete(target)
+      }
+
       cancelAnimationFrame(raf)
       resizeObserver.disconnect()
       intersectionObserver.disconnect()

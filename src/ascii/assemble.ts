@@ -1,4 +1,5 @@
-import { MONO_FAMILY, WAVE_SPEED, randomGlyph, type AsciiField } from './field'
+import { GLYPHS, MONO_FAMILY, WAVE_SPEED, randomGlyph, type AsciiField } from './field'
+import type { CellGoal } from './targets'
 
 // one visible character of the page, in viewport coordinates
 export interface GlyphTarget {
@@ -181,6 +182,25 @@ interface Particle {
   nextGlyph: number
 }
 
+// a glyph flying into a cell of another field (the hero portrait), drawn from the intro's glyph atlas
+interface CellParticle {
+  goal: CellGoal
+  // centers of the source cell and of the goal cell
+  x0: number
+  y0: number
+  x1: number
+  y1: number
+  cx: number
+  cy: number
+  delay: number
+  duration: number
+  from: number
+  glyph: number
+  nextGlyph: number
+  // the atlas draws glyphs at the intro's font-to-cell ratio; this brings them to the goal's ratio
+  scale: number
+}
+
 // past this share of its flight a particle shows its real character in the real font
 const SETTLE = 0.76
 // how many random lit cells compete to be a particle's launch point
@@ -197,12 +217,20 @@ export class Assembly {
   readonly end: number
 
   private readonly particles: Particle[] = []
+  private readonly cells: CellParticle[] = []
   private readonly fieldFont: number
   private readonly fonts = new Map<number, string>()
 
-  constructor (targets: GlyphTarget[], field: AsciiField, origin: { x: number, y: number }, private readonly start: number) {
+  constructor (
+    targets: GlyphTarget[],
+    private readonly field: AsciiField,
+    origin: { x: number, y: number },
+    private readonly start: number,
+    goals: CellGoal[] = []
+  ) {
     const lit = field.litCells(0.16)
     const fieldFont = field.fontSize
+    const fieldCell = field.cellSize
     let end = 0
 
     this.fieldFont = fieldFont
@@ -252,6 +280,52 @@ export class Assembly {
       end = Math.max(end, delay + duration)
     }
 
+    for (const goal of goals) {
+      const x1 = goal.x + goal.width / 2
+      const y1 = goal.y + goal.height / 2
+      let best = -1
+      let bestDistance = Infinity
+
+      // fewer candidates than for text: there can be thousands of these
+      for (let k = 0; k < 4 && lit.length > 0; k++) {
+        const cell = lit[Math.floor(Math.random() * lit.length)]
+        const p = field.cellCenter(cell)
+        const d = (p.x - x1) ** 2 + (p.y - y1) ** 2
+
+        if (d < bestDistance) {
+          best = cell
+          bestDistance = d
+        }
+      }
+
+      const source = best >= 0 ? field.cellCenter(best) : { x: Math.random() * field.width, y: Math.random() * field.height }
+      const dx = x1 - source.x
+      const dy = y1 - source.y
+      const distance = Math.sqrt(dx * dx + dy * dy)
+      const bend = (Math.random() - 0.5) * 0.6
+
+      const delay = (Math.hypot(source.x - origin.x, source.y - origin.y) / WAVE_SPEED) * 1000 + Math.random() * 160
+      const duration = 560 + Math.min(distance, 900) * 0.4 + Math.random() * 220
+
+      this.cells.push({
+        goal,
+        x0: source.x,
+        y0: source.y,
+        x1,
+        y1,
+        cx: source.x + dx * 0.5 - dy * bend,
+        cy: source.y + dy * 0.5 + dx * bend,
+        delay,
+        duration,
+        from: best >= 0 ? Math.max(field.cellAlpha(best), 0.25) : 0,
+        glyph: best >= 0 ? field.cellGlyphIndex(best) : 0,
+        nextGlyph: 0,
+        scale: (goal.fontSize / goal.height) / (fieldFont / fieldCell.height)
+      })
+
+      end = Math.max(end, delay + duration)
+    }
+
     this.end = start + end + 60
   }
 
@@ -260,6 +334,9 @@ export class Assembly {
   }
 
   draw (ctx: CanvasRenderingContext2D, now: number, dpr: number) {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    this.drawCells(ctx, now)
+
     const frame: { font: string, color: string, alpha: number, ch: string, x: number, y: number }[] = []
 
     for (const p of this.particles) {
@@ -322,6 +399,41 @@ export class Assembly {
 
     ctx.globalAlpha = 1
     ctx.setTransform(1, 0, 0, 1, 0, 0)
+  }
+
+  private drawCells (ctx: CanvasRenderingContext2D, now: number) {
+    const { width: sw, height: sh } = this.field.cellSize
+
+    for (const p of this.cells) {
+      const progress = (now - this.start - p.delay) / p.duration
+
+      if (progress < 0) {
+        continue
+      }
+
+      const k = progress > 1 ? 1 : progress
+      const e = easeOutQuart(k)
+      const inv = 1 - e
+      const settled = k >= SETTLE
+
+      const x = inv * inv * p.x0 + 2 * inv * e * p.cx + e * e * p.x1
+      const y = inv * inv * p.y0 + 2 * inv * e * p.cy + e * e * p.y1
+      const width = sw + (p.goal.width * p.scale - sw) * e
+      const height = sh + (p.goal.height * p.scale - sh) * e
+
+      if (!settled && now >= p.nextGlyph) {
+        p.glyph = Math.floor(Math.random() * GLYPHS.length)
+        p.nextGlyph = now + 40 + Math.random() * 60
+      }
+
+      ctx.globalAlpha = settled
+        ? p.goal.alpha
+        : p.from + (Math.max(p.goal.alpha, 0.35) - p.from) * Math.min(1, k * 4)
+
+      this.field.drawGlyph(ctx, settled ? p.goal.glyph : p.glyph, x - width / 2, y - height / 2, width, height)
+    }
+
+    ctx.globalAlpha = 1
   }
 
   private readonly sizes = new Map<string, number>()
