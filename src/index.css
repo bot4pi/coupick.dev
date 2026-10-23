@@ -54,6 +54,8 @@
 html {
   /* the intro locks scrolling; a stable gutter keeps the layout from shifting when it unlocks */
   scrollbar-gutter: stable;
+  /* nothing may ever widen the page: on phones that zooms the whole site out and shifts it sideways */
+  overflow-x: clip;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--nav-height) + 24px);
 }
@@ -398,17 +400,23 @@ html[data-entry='plain'] #app {
     0 8px 24px rgb(0 0 0 / 0.5);
 
   pointer-events: none;
-  opacity: 0;
-  transform: translateX(-50%) translateY(4px);
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease;
+  transform: translateX(-50%);
+
+  /* not rendered at all until it's needed: hidden notes near the edge used to widen the page */
+  display: none;
+}
+
+@keyframes note-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
 }
 
 .with-note[data-note]:hover::after,
 .with-note[data-note]:focus::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  display: block;
+  animation: note-in 160ms ease;
 }
 
 /* --- bits -------------------------------------------------------------------------------- */

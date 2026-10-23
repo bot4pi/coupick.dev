@@ -1,6 +1,6 @@
 import { AsciiCanvas, SectionHead } from '../../components'
 import { playIntro } from '../../intro'
-import { BrandIcon, IconArrowUpRight, IconReplay, siGithub, siSteam, siTelegram } from '../../shared'
+import { BrandIcon, IconArrowUpRight, IconReplay, siGithub, siSteam, siTelegram, useVisits } from '../../shared'
 
 import { Greeting } from './Greeting'
 
@@ -36,6 +36,21 @@ export const ContactSection = () => (
   </section>
 )
 
+const VisitCounter = () => {
+  const visits = useVisits()
+
+  if (visits === null) {
+    return null
+  }
+
+  return (
+    <span class='footer-visits mono' title={`${visits.views.toLocaleString('en')} page views`}>
+      <span class='footer-visits-dot' aria-hidden='true' />
+      {visits.visitors.toLocaleString('en')} {visits.visitors === 1 ? 'visitor' : 'visitors'}
+    </span>
+  )
+}
+
 export const Footer = () => (
   <footer class='footer'>
     <div class='container'>
@@ -66,6 +81,7 @@ export const Footer = () => (
         sources
         <IconArrowUpRight size='12px' />
       </a>
+      <VisitCounter />
       <button type='button' class='footer-replay' onClick={playIntro}>
         <IconReplay size='14px' />
         replay the intro

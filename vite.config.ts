@@ -30,7 +30,19 @@ const localApi = (): Plugin => ({
           return
         }
 
-        const response = await handler(new Request(url, { method: req.method })) as Response
+        const headers = new Headers()
+
+        for (const [key, value] of Object.entries(req.headers)) {
+          if (value !== undefined) {
+            headers.set(key, Array.isArray(value) ? value.join(', ') : value)
+          }
+        }
+
+        if (!headers.has('x-forwarded-for') && req.socket.remoteAddress !== undefined) {
+          headers.set('x-forwarded-for', req.socket.remoteAddress)
+        }
+
+        const response = await handler(new Request(url, { method: req.method, headers })) as Response
 
         res.statusCode = response.status
         response.headers.forEach((value, key) => res.setHeader(key, value))

@@ -2,9 +2,10 @@
 
 sources of my [coupick.dev](https://coupick.dev) website.
 
-preact + vite + typescript, deployed on vercel. the server-side bits are three vercel functions:
+preact + vite + typescript, deployed on vercel. the server-side bits are four vercel functions:
 [`api/now-playing.ts`](api/now-playing.ts) asks spotify what i'm listening to,
 [`api/wakatime.ts`](api/wakatime.ts) sums up my coding time from wakatime,
+[`api/visits.ts`](api/visits.ts) counts visitors for the footer,
 [`api/avatar.ts`](api/avatar.ts) serves my current telegram avatar.
 
 ## the glyph thing
@@ -53,6 +54,10 @@ and set these environment variables:
 | `SPOTIFY_REFRESH_TOKEN` | needs `user-read-currently-playing`; add `user-read-recently-played` to also show recent tracks |
 | `WAKATIME_API_KEY` | optional, [wakatime.com/settings/api-key](https://wakatime.com/settings/api-key): switches the card to the last 7 days, day by day |
 | `WAKATIME_USERNAME` | optional, `coup` by default: whose public all-time stats to show when there is no api key |
+| `KV_REST_API_URL`, `KV_REST_API_TOKEN` | set by connecting an upstash for redis store to the project (vercel → storage). the visitor counter stays hidden without it |
+
+the counter keeps unique visitors in a redis hyperloglog of hashed ip + user agent, so it can count people
+without storing anything that points back to them. page views go up once per tab session, bots aren't counted.
 
 the spotify credentials from [spotify-telegram-sync](https://github.com/bot4pi/spotify-telegram-sync) work as is.
 without them the site still works, the player just says nothing is playing.
