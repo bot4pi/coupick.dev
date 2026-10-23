@@ -1,5 +1,7 @@
 .hero {
   position: relative;
+  /* keeps the backdrop (z-index -1) above the page background */
+  isolation: isolate;
   padding-top: calc(var(--nav-height) + 112px);
 }
 

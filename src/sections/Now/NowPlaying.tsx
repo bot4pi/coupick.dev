@@ -54,7 +54,7 @@ const Cover = ({ track }: { track: Track }) => {
             underlay={0.22}
             onReady={() => setAscii(true)}
           />
-          <img src={image} alt='' width={232} height={232} />
+          <img src={image} alt='' width={184} height={184} />
         </>
       )}
     </a>

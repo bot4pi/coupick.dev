@@ -77,8 +77,7 @@ const Stats = ({ stats }: { stats: CodingStats }) => (
     </div>
 
     {stats.days.length > 0 && <Chart days={stats.days} />}
-    {/* without the week chart there is room for one more language */}
-    {stats.languages.length > 0 && <Languages languages={stats.languages} limit={stats.days.length > 0 ? 4 : 5} />}
+    {stats.languages.length > 0 && <Languages languages={stats.languages} limit={4} />}
 
     {stats.allTimeSeconds !== null && (
       <p class='cs-foot mono'>

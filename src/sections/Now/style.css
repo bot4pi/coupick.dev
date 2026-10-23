@@ -32,7 +32,7 @@
 .cs {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 16px;
   padding: 20px;
   overflow: hidden;
 }
@@ -111,8 +111,8 @@
 /* cover on the left, the track and a small player on the right, both as tall as the cover */
 .np-track {
   display: grid;
-  grid-template-columns: min(232px, 46%) minmax(0, 1fr);
-  gap: 20px;
+  grid-template-columns: min(184px, 40%) minmax(0, 1fr);
+  gap: 18px;
 }
 
 .np-cover {
@@ -158,8 +158,6 @@
   padding-top: 2px;
 }
 
-.np-name,
-.np-artist,
 .np-album,
 .np-recent-name,
 .np-recent-artist {
@@ -168,8 +166,18 @@
   white-space: nowrap;
 }
 
+/* long titles get a second line before they are cut */
+.np-name,
+.np-artist {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
 .np-name {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.025em;
@@ -298,7 +306,7 @@
 .np-sleep {
   position: relative;
   flex: 1;
-  min-height: 140px;
+  min-height: 96px;
   margin: 12px -20px -20px;
 
   -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent);
@@ -375,7 +383,7 @@
 }
 
 .cs-total {
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.05em;
@@ -402,7 +410,7 @@
 .cs-col {
   display: flex;
   align-items: flex-end;
-  height: 84px;
+  height: 64px;
   border-radius: 6px;
   background: rgb(255 255 255 / 0.03);
 }
@@ -448,7 +456,7 @@
 .cs-langs {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .cs-lang {
