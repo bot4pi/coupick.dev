@@ -63,7 +63,9 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [preact(), localApi()],
     define: {
-      __BUILD_DATE__: JSON.stringify(new Date().toISOString())
+      __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
+      // vercel hands web analytics its script and intake paths through this variable at build time
+      __VERCEL_ANALYTICS_CONFIG__: JSON.stringify(process.env.VERCEL_OBSERVABILITY_CLIENT_CONFIG ?? '')
     }
   }
 })
