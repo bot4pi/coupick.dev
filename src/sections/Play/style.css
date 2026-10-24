@@ -1,0 +1,119 @@
+.play-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.play-grid > li {
+  display: flex;
+}
+
+@media (max-width: 720px) {
+  .play-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.game-card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+
+  transition: transform 500ms var(--ease-out);
+}
+
+.game-card:active {
+  transform: scale(0.99);
+}
+
+.game-card-cover {
+  position: relative;
+  height: 176px;
+  flex: none;
+  border-bottom: 1px solid var(--border);
+  background: rgb(255 255 255 / 0.015);
+
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
+}
+
+.game-preview {
+  position: absolute;
+  inset: 8px 8px 0;
+  width: calc(100% - 16px);
+  height: calc(100% - 8px);
+}
+
+.game-card-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 20px 20px;
+}
+
+.game-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.game-card-name {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.game-card-best {
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-3);
+}
+
+.game-card-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+
+  font-size: 12px;
+  color: var(--text-3);
+  transition: color 200ms ease;
+}
+
+.game-card-play svg {
+  transition: transform 400ms var(--ease-out);
+}
+
+.game-card:hover .game-card-play {
+  color: var(--text);
+}
+
+.game-card:hover .game-card-play svg {
+  transform: translateX(3px);
+}
+
+.game-card-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.game-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 8px;
+
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-3);
+}
+
+.game-card-tags li {
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: var(--surface-2);
+}

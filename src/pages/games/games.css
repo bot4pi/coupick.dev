@@ -1,0 +1,47 @@
+.game-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+.ascii-canvas.game-page-field {
+  position: fixed;
+  inset: 0;
+
+  /* the glyphs stay on the sides and fade out before they reach the game and its text */
+  -webkit-mask-image: linear-gradient(to right, #000 calc(50% - 520px), transparent calc(50% - 300px), transparent calc(50% + 300px), #000 calc(50% + 520px));
+  mask-image: linear-gradient(to right, #000 calc(50% - 520px), transparent calc(50% - 300px), transparent calc(50% + 300px), #000 calc(50% + 520px));
+}
+
+/* the game is sized by the height of the screen too (through its height-to-width ratio), so the whole
+   board fits without scrolling */
+.game-page-inner {
+  position: relative;
+  max-width: calc(min(600px, max(300px, (100vh - 360px) / var(--game-ratio, 1))) + var(--gutter) * 2);
+  max-width: calc(min(600px, max(300px, (100dvh - 360px) / var(--game-ratio, 1))) + var(--gutter) * 2);
+}
+
+.game-page-top {
+  display: flex;
+  padding: 16px 0 24px;
+}
+
+.game-page-back {
+  height: 34px;
+  padding: 0 14px;
+  font-size: 13px;
+}
+
+.game-page .section-head {
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.game-page .section-title {
+  font-size: 2rem;
+}
+
+.game-page .section-sub {
+  font-size: 14px;
+}

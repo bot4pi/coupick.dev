@@ -1,15 +1,40 @@
-import { useEffect } from 'preact/hooks'
+import type { ComponentType } from 'preact'
+import { useEffect, useState } from 'preact/hooks'
 
 import { MainPage, NotFoundPage } from './pages'
 
-export const isHome = ['/', '/index.html'].includes(window.location.pathname)
+const path = window.location.pathname.replace(/\/+$/, '') || '/'
+
+export const isHome = path === '/' || path === '/index.html'
+
+// the games are only downloaded when someone opens one
+const games: Record<string, () => Promise<{ default: ComponentType }>> = {
+  '/snake': () => import('./pages/games/snake'),
+  '/blockblast': () => import('./pages/games/blockblast')
+}
+
+const LazyPage = ({ load }: { load: () => Promise<{ default: ComponentType }> }) => {
+  const [Page, setPage] = useState<ComponentType | null>(null)
+
+  useEffect(() => {
+    load().then(module => setPage(() => module.default))
+  }, [])
+
+  return Page === null ? null : <Page />
+}
 
 export function App () {
+  const game = games[path]
+
   useEffect(() => {
-    if (!isHome) {
+    if (!isHome && game === undefined) {
       document.title = 'coupick.dev · not found'
     }
   }, [])
 
-  return isHome ? <MainPage /> : <NotFoundPage />
+  if (isHome) {
+    return <MainPage />
+  }
+
+  return game !== undefined ? <LazyPage load={game} /> : <NotFoundPage />
 }

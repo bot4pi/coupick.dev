@@ -1,0 +1,22 @@
+.snake-board {
+  position: relative;
+  aspect-ratio: 1;
+  margin: 10px;
+
+  /* swipes steer the snake instead of scrolling the page */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.snake-board canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.snake-board .game-overlay {
+  inset: -10px;
+}

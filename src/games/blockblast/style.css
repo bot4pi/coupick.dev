@@ -1,0 +1,59 @@
+.bb-board {
+  position: relative;
+  aspect-ratio: 100 / 142;
+
+  /* dragging a piece must not scroll the page */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.bb-board canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.bb-combo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+
+  font-size: 12px;
+  color: var(--text-3);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+
+  opacity: 0.5;
+  transition:
+    opacity 300ms ease,
+    color 300ms ease;
+}
+
+.bb-combo-on {
+  color: var(--text);
+  opacity: 1;
+}
+
+/* how many more pieces can go down without a clear before the combo is gone */
+.bb-combo-grace {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.bb-combo-grace i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-4);
+  transition: background 300ms ease;
+}
+
+.bb-combo-on .bb-combo-grace i.on {
+  background: var(--text);
+}

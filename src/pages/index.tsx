@@ -1,5 +1,5 @@
 import { Snow } from '../components'
-import { ContactSection, Footer, Hero, Nav, NowSection, ProjectsSection, StackSection, SupportSection } from '../sections'
+import { ContactSection, Footer, Hero, Nav, NowSection, PlaySection, ProjectsSection, StackSection, SupportSection } from '../sections'
 import { useNowPlaying, useReveal, useSpotlight } from '../shared'
 
 export const MainPage = () => {
@@ -18,6 +18,7 @@ export const MainPage = () => {
         <StackSection />
         <ProjectsSection />
         <SupportSection />
+        <PlaySection />
         <ContactSection />
       </main>
 

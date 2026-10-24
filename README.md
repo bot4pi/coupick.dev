@@ -24,6 +24,14 @@ the intro plays once per tab session. `?intro` forces it, `prefers-reduced-motio
 in december it snows over the page (glyphs again, of course). it's the visitor's own calendar, so nothing
 on the server is involved; `?snow` shows it any other month.
 
+## the games
+
+the `~/play` section has two tiny games, each on its own page and only downloaded when opened:
+[`/snake`](src/games/snake) (it eats money, obviously) and [`/blockblast`](src/games/blockblast).
+the rules live in plain `engine.ts` files with no idea of how they are drawn, the boards are canvases that
+borrow the glyph tricks from the rest of the site ([`src/games/effects.ts`](src/games/effects.ts)), and the
+covers on the main page are the same engines playing by themselves. best scores stay in your browser.
+
 ## running
 
 ```sh
