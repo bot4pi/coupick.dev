@@ -9,7 +9,7 @@ import './style.css'
 const socials = [
   { name: 'telegram', handle: '@bot4pi', url: 'https://t.me/bot4pi', icon: siTelegram, note: 'the fastest way to reach me' },
   { name: 'github', handle: 'bot4pi', url: 'https://github.com/bot4pi', icon: siGithub, note: 'where the code lives' },
-  { name: 'steam', handle: 'coupick', url: 'https://steamcommunity.com/id/coupick/', icon: siSteam, note: 'for after hours' }
+  { name: 'steam', handle: 'bot4pi', url: 'https://steamcommunity.com/id/bot4pi/', icon: siSteam, note: 'for after hours' }
 ]
 
 export const ContactSection = () => (

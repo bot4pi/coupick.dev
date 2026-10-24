@@ -9,11 +9,15 @@ import './style.css'
 
 const GLYPHS = ['*', '*', '·', '+', '.', '×']
 
+// flakes are drawn back to front in a few depth layers, so the font changes only a handful of times a frame
+const LAYERS = 6
+
 interface Flake {
   x: number
   y: number
   // 0 = far away (small, slow, dim), 1 = close (big, fast, bright)
   depth: number
+  layer: number
   glyph: string
   sway: number
   phase: number
@@ -23,14 +27,24 @@ interface Flake {
 const isSnowSeason = () =>
   new Date().getMonth() === 11 || new URLSearchParams(window.location.search).has('snow')
 
-const createFlake = (width: number, height: number, anywhere: boolean): Flake => ({
-  x: Math.random() * width,
-  y: anywhere ? Math.random() * height : -20 - Math.random() * 40,
-  depth: Math.random(),
-  glyph: GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
-  sway: 6 + Math.random() * 18,
-  phase: Math.random() * Math.PI * 2
-})
+// a flake that fell out of view starts over above the screen, at the same depth
+const respawn = (flake: Flake, width: number, height: number, anywhere: boolean) => {
+  flake.x = Math.random() * width
+  flake.y = anywhere ? Math.random() * height : -20 - Math.random() * 60
+  flake.glyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)]
+  flake.sway = 6 + Math.random() * 18
+  flake.phase = Math.random() * Math.PI * 2
+}
+
+const createFlake = (width: number, height: number): Flake => {
+  const depth = Math.random()
+  const layer = Math.min(LAYERS - 1, Math.floor(depth * LAYERS))
+  const flake: Flake = { x: 0, y: 0, depth, layer, glyph: '*', sway: 0, phase: 0 }
+
+  respawn(flake, width, height, true)
+
+  return flake
+}
 
 const SnowCanvas = () => {
   const ref = useRef<HTMLCanvasElement>(null)
@@ -57,14 +71,19 @@ const SnowCanvas = () => {
       canvas.width = Math.round(width * dpr)
       canvas.height = Math.round(height * dpr)
 
-      // roughly one flake per 13k px², fewer on phones, never a blizzard
-      const count = Math.min(150, Math.round((width * height) / 13_000))
+      // roughly one flake per 4.5k px²: a proper snowfall, still light enough for a phone
+      const count = Math.min(420, Math.round((width * height) / 4_500))
 
-      flakes = flakes.slice(0, count)
+      // the array is sorted by depth, so a shrinking window drops random flakes rather than the tail
+      while (flakes.length > count) {
+        flakes.splice(Math.floor(Math.random() * flakes.length), 1)
+      }
 
       while (flakes.length < count) {
-        flakes.push(createFlake(width, height, true))
+        flakes.push(createFlake(width, height))
       }
+
+      flakes.sort((a, b) => a.depth - b.depth)
     }
 
     const frame = (now: number) => {
@@ -81,6 +100,8 @@ const SnowCanvas = () => {
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
+      let layer = -1
+
       for (const flake of flakes) {
         const speed = 18 + flake.depth * 46
 
@@ -88,7 +109,7 @@ const SnowCanvas = () => {
         flake.x += (wind * (0.4 + flake.depth)) * dt
 
         if (flake.y > height + 20) {
-          Object.assign(flake, createFlake(width, height, false))
+          respawn(flake, width, height, false)
         }
 
         if (flake.x < -20) {
@@ -97,10 +118,14 @@ const SnowCanvas = () => {
           flake.x -= width + 40
         }
 
-        const size = 8 + flake.depth * 9
+        if (flake.layer !== layer) {
+          const near = (flake.layer + 0.5) / LAYERS
 
-        ctx.font = `${size.toFixed(1)}px ${MONO_FAMILY}`
-        ctx.globalAlpha = 0.18 + flake.depth * 0.45
+          layer = flake.layer
+          ctx.font = `${(8 + near * 10).toFixed(1)}px ${MONO_FAMILY}`
+          ctx.globalAlpha = 0.18 + near * 0.5
+        }
+
         ctx.fillText(flake.glyph, flake.x + Math.sin(t * 0.9 + flake.phase) * flake.sway, flake.y)
       }
 

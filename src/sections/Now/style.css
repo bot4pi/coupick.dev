@@ -37,6 +37,12 @@
   overflow: hidden;
 }
 
+/* webkit clips the blurred glow to a plain rectangle despite overflow + border-radius, so its corners poked out
+   of the card on iphones. clip-path cuts it to the rounded shape everywhere */
+.np {
+  clip-path: inset(0 round var(--radius-lg));
+}
+
 .widget-loading {
   display: flex;
   align-items: center;
