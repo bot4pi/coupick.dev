@@ -62,10 +62,68 @@ const Qr = ({ value }: { value: string }) => {
   )
 }
 
+/**
+ * The little qr button next to a chip, and the code it pops open under it. It sits inside a positioned
+ * `.wallet` so the popover lines up with the chip; pointing anywhere else or escape closes it.
+ */
+export const QrButton = ({ name, value }: { name: string, value: string }) => {
+  const [open, setOpen] = useState(false)
+  const button = useRef<HTMLButtonElement>(null)
+  const popover = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node
+
+      if (!button.current?.contains(target) && !popover.current?.contains(target)) {
+        setOpen(false)
+      }
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  return (
+    <>
+      <button
+        ref={button}
+        type='button'
+        class={`wallet-qr-toggle${open ? ' wallet-qr-toggle-open' : ''}`}
+        onClick={() => setOpen(o => !o)}
+        aria-label={open ? 'hide qr code' : `show ${name} qr code`}
+        aria-expanded={open}
+      >
+        <IconQrCode size='14px' />
+      </button>
+
+      {open && (
+        <span ref={popover} class='wallet-qr-popover' role='dialog' aria-label={`${name} qr code`}>
+          <Qr value={value} />
+          <span class='wallet-qr-label'>{name}</span>
+        </span>
+      )}
+    </>
+  )
+}
+
 export const Wallet = ({ wallet }: { wallet: WalletInfo }) => {
   const [copied, setCopied] = useState(false)
-  const [qrOpen, setQrOpen] = useState(false)
-  const anchor = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     if (!copied) {
@@ -77,32 +135,6 @@ export const Wallet = ({ wallet }: { wallet: WalletInfo }) => {
     return () => clearTimeout(timer)
   }, [copied])
 
-  useEffect(() => {
-    if (!qrOpen) {
-      return
-    }
-
-    const onPointerDown = (event: PointerEvent) => {
-      if (anchor.current !== null && !anchor.current.contains(event.target as Node)) {
-        setQrOpen(false)
-      }
-    }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setQrOpen(false)
-      }
-    }
-
-    document.addEventListener('pointerdown', onPointerDown)
-    document.addEventListener('keydown', onKeyDown)
-
-    return () => {
-      document.removeEventListener('pointerdown', onPointerDown)
-      document.removeEventListener('keydown', onKeyDown)
-    }
-  }, [qrOpen])
-
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(wallet.address)
@@ -113,7 +145,7 @@ export const Wallet = ({ wallet }: { wallet: WalletInfo }) => {
   }
 
   return (
-    <span class='wallet' ref={anchor}>
+    <span class='wallet'>
       <button
         type='button'
         class={`wallet-chip with-note${copied ? ' wallet-chip-copied' : ''}`}
@@ -127,22 +159,7 @@ export const Wallet = ({ wallet }: { wallet: WalletInfo }) => {
         {copied ? <IconCheck size='13px' /> : <IconCopy size='13px' />}
       </button>
 
-      <button
-        type='button'
-        class={`wallet-qr-toggle${qrOpen ? ' wallet-qr-toggle-open' : ''}`}
-        onClick={() => setQrOpen(open => !open)}
-        aria-label={qrOpen ? 'hide qr code' : `show ${wallet.name} qr code`}
-        aria-expanded={qrOpen}
-      >
-        <IconQrCode size='14px' />
-      </button>
-
-      {qrOpen && (
-        <span class='wallet-qr-popover' role='dialog' aria-label={`${wallet.name} qr code`}>
-          <Qr value={wallet.address} />
-          <span class='wallet-qr-label'>{wallet.name}</span>
-        </span>
-      )}
+      <QrButton name={wallet.name} value={wallet.address} />
     </span>
   )
 }

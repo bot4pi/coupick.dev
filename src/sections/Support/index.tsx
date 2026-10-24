@@ -1,7 +1,7 @@
 import { SectionHead } from '../../components'
 import { BrandIcon, IconArrowUpRight, siTelegram } from '../../shared'
 
-import { Wallet, type WalletInfo } from './Wallet'
+import { QrButton, Wallet, type WalletInfo } from './Wallet'
 
 import './style.css'
 
@@ -54,12 +54,16 @@ export const SupportSection = () => (
       <div class='support-row'>
         <span class='support-row-label mono'>telegram</span>
         <div class='support-wallets'>
-          <a class='support-link' href={CRYPTOBOT} target='_blank' rel='noopener noreferrer'>
-            <BrandIcon icon={siTelegram} size='16px' />
-            <span>cryptobot</span>
-            <span class='wallet-label'>any coin, via @send</span>
-            <IconArrowUpRight size='13px' />
-          </a>
+          <span class='wallet support-link-wrap'>
+            <a class='support-link' href={CRYPTOBOT} target='_blank' rel='noopener noreferrer'>
+              <BrandIcon icon={siTelegram} size='16px' />
+              <span>cryptobot</span>
+              <span class='wallet-label'>any coin, via @send</span>
+              <IconArrowUpRight size='13px' />
+            </a>
+
+            <QrButton name='cryptobot' value={CRYPTOBOT} />
+          </span>
         </div>
       </div>
 

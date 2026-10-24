@@ -224,15 +224,19 @@
 
 /* --- link chip: same look as a wallet, but it opens something instead of copying ------------ */
 
+.support-wallets > .support-link-wrap {
+  flex-basis: 100%;
+}
+
 .support-link {
   display: inline-flex;
-  flex: 1 1 100%;
+  flex: 1;
   align-items: center;
   gap: 8px;
   min-width: 0;
   height: 36px;
   padding: 0 12px 0 10px;
-  border-radius: 999px;
+  border-radius: 999px 0 0 999px;
 
   font-size: 13px;
   line-height: 1;
