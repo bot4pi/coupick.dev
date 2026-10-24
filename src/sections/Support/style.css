@@ -221,3 +221,51 @@
   font-size: 11px;
   color: var(--text-3);
 }
+
+/* --- link chip: same look as a wallet, but it opens something instead of copying ------------ */
+
+.support-link {
+  display: inline-flex;
+  flex: 1 1 100%;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 36px;
+  padding: 0 12px 0 10px;
+  border-radius: 999px;
+
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text-2);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border);
+
+  transition:
+    color 200ms ease,
+    background 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.support-link:hover {
+  color: var(--text);
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--border-2);
+}
+
+.support-link > svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+}
+
+.support-link > svg:last-child {
+  width: 13px;
+  height: 13px;
+  opacity: 0.6;
+  transition: transform 400ms var(--ease-out);
+}
+
+.support-link:hover > svg:last-child {
+  transform: translate(2px, -2px);
+}

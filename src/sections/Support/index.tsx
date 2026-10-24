@@ -1,4 +1,5 @@
 import { SectionHead } from '../../components'
+import { BrandIcon, IconArrowUpRight, siTelegram } from '../../shared'
 
 import { Wallet, type WalletInfo } from './Wallet'
 
@@ -23,6 +24,9 @@ const stablecoins: WalletInfo[] = [
   { name: 'trc-20', coin: 'trc20', address: TRON, label: 'TF6s…dAb' }
 ]
 
+// a cryptobot invoice: pay with any coin without leaving telegram
+const CRYPTOBOT = 'https://t.me/send?start=IVVutsYAXfim'
+
 const WalletRow = ({ label, wallets }: { label: string, wallets: WalletInfo[] }) => (
   <div class='support-row'>
     <span class='support-row-label mono'>{label}</span>
@@ -46,6 +50,18 @@ export const SupportSection = () => (
 
       <WalletRow label='crypto' wallets={coins} />
       <WalletRow label='usdt' wallets={stablecoins} />
+
+      <div class='support-row'>
+        <span class='support-row-label mono'>telegram</span>
+        <div class='support-wallets'>
+          <a class='support-link' href={CRYPTOBOT} target='_blank' rel='noopener noreferrer'>
+            <BrandIcon icon={siTelegram} size='16px' />
+            <span>cryptobot</span>
+            <span class='wallet-label'>any coin, via @send</span>
+            <IconArrowUpRight size='13px' />
+          </a>
+        </div>
+      </div>
 
       <p class='support-note'>
         click to copy. eth, bnb, arbitrum and usdt erc-20 share one address: just make sure the network in your
