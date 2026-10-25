@@ -227,3 +227,22 @@
     animation: none;
   }
 }
+
+/* a soft highlight under a few words, never a sticker */
+.hero-bio mark {
+  padding: 1px 4px;
+  border-radius: 4px;
+  color: var(--text);
+  background: rgb(255 255 255 / 0.12);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.hero-bio-open mark {
+  transition: background 200ms ease;
+}
+
+.hero-bio-open:hover mark,
+.hero-bio-open:focus-visible mark {
+  background: rgb(255 255 255 / 0.22);
+}

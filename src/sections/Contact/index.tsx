@@ -15,7 +15,7 @@ const socials = [
 export const ContactSection = () => (
   <section class='section container' id='contact'>
     <SectionHead kicker='~/contact' title={<><span class='sr-only'>say hi</span><span aria-hidden='true'>say <Greeting /></span></>}>
-      about a bot, a framework, a job or nothing in particular. i answer on telegram
+      about a job (yes, i'm open to work), a bot, a framework or nothing in particular. i answer on telegram
     </SectionHead>
 
     <ul class='contact-list' data-reveal=''>

@@ -70,9 +70,10 @@ export const Hero = ({ nowPlaying }: { nowPlaying: NowPlayingState }) => {
           </h1>
 
           <p class='hero-bio'>
-            i write bots, userbots and frameworks for bots <i>and</i> userbots, keep a wiki about all of it
-            and build sites, tools and whatever else i get curious about. if it talks to telegram, i've
-            probably written it at least twice <span class='muted'>(duh!)</span>
+            i do backend and frontend: sites, bots and userbots, frameworks for bots <i>and</i> userbots, plus
+            mini apps, mostly in typescript or python. tg is my home turf <span class='muted'>(duh!)</span>, but i'll
+            happily build anything i get curious about. and yes, i'm{' '}
+            <a class='hero-bio-open' href='#contact'><mark><i>open to work</i></mark></a>
           </p>
 
           <div class='hero-actions'>
