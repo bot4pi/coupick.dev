@@ -3,13 +3,9 @@ import { useEffect, useState } from 'preact/hooks'
 
 import { whenIntroDone } from '../intro'
 
+import { isOnScreen } from './visibility'
+
 export const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-const isOnScreen = (el: Element) => {
-  const rect = el.getBoundingClientRect()
-
-  return rect.top < window.innerHeight && rect.bottom > 0
-}
 
 /**
  * Fades `[data-reveal]` elements in as they scroll into view. Whatever is already on screen

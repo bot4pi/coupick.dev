@@ -1,0 +1,10 @@
+<!-- the view box hugs the strokes, so the icon fills the whole favicon slot -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="17.125 17.375 65.25 65.25">
+  <style>
+    path { fill: none; stroke: #fff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round }
+    /* white disappears on a light tab bar */
+    @media (prefers-color-scheme: light) { path { stroke: #0a0a0a } }
+  </style>
+  <path d="M67.014 37.557 79.375 50 67.015 62.444M32.486 37.382 20.125 49.825 32.485 62.269" />
+  <path d="M44.765 69.601 54.735 30.399" />
+</svg>

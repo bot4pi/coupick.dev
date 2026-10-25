@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 
 import { Assembly, collectCellGoals, collectTargets, useAsciiField, type FieldOptions } from '../ascii'
+import { isOnScreen } from '../shared/visibility'
 
 import { setIntroPhase } from './state'
 
@@ -84,7 +85,18 @@ export const Intro = ({ root, onClose }: IntroProps) => {
     }
 
     const now = performance.now()
+    // blocks only peeking in at the bottom edge keep their own reveal on scroll, so no glyphs land in them
+    const peeking = [...root.querySelectorAll<HTMLElement>('[data-reveal=""]')].filter(el => !isOnScreen(el))
+
+    peeking.forEach(el => {
+      el.dataset.assemble = 'off'
+    })
+
     const targets = collectTargets(root)
+
+    peeking.forEach(el => {
+      delete el.dataset.assemble
+    })
     // glyph fields on the page (the portrait) get their own flying glyphs
     const cells = collectCellGoals()
 
