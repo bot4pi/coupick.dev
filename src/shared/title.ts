@@ -4,7 +4,7 @@ import { GLYPHS } from '../ascii'
 // while the tab sits in the background
 
 const CARET = '_'
-const TICKER_TAIL = ' ✻ i make smth ✻ '
+const TICKER_TAIL = " ✻ i'm a dev ✻ "
 
 // a glitch shows a few glyphs in a row, slow enough to actually read in the tab
 const GLITCH_FRAMES = 4

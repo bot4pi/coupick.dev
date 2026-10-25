@@ -66,13 +66,13 @@ export const Hero = ({ nowPlaying }: { nowPlaying: NowPlayingState }) => {
           </div>
 
           <h1 class='hero-title'>
-            i'm coup, <span class='hero-title-dim'>and i make smth.</span>
+            i'm coup, <span class='hero-title-dim'>and i'm a dev.</span>
           </h1>
 
           <p class='hero-bio'>
-            bots, userbots, frameworks for bots <i>and</i> userbots, a wiki about all of it, sites, tools
-            and whatever else i get curious about. and if it talks to telegram, i've probably written it
-            at least twice <span class='muted'>(duh!)</span>
+            i write bots, userbots and frameworks for bots <i>and</i> userbots, keep a wiki about all of it
+            and build sites, tools and whatever else i get curious about. if it talks to telegram, i've
+            probably written it at least twice <span class='muted'>(duh!)</span>
           </p>
 
           <div class='hero-actions'>
