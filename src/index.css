@@ -129,14 +129,18 @@ html[data-intro='intro'] #app {
   opacity: 0;
 }
 
-/* boxes, borders and pictures fade in while the glyphs fly into the (still invisible) text */
+/* boxes, borders, pictures and icons fade in while the glyphs fly into the (still invisible) text */
 html[data-intro='assembling'] #app {
   transition: opacity 900ms var(--ease-out) 150ms;
 }
 
+/*
+ * only the letters are hidden: `color` stays, so icons and dots drawn with currentColor fade in with the rest
+ * of the page instead of popping up in the frame the intro ends
+ */
 html[data-intro='assembling'] #app,
 html[data-intro='assembling'] #app * {
-  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
   text-shadow: none !important;
 }
 
