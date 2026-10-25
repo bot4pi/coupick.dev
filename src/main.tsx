@@ -3,8 +3,9 @@ import { render } from 'preact'
 import './fonts'
 import './index.css'
 
-import { App, isHome } from './app'
+import { App, isHome, pageTitle } from './app'
 import { playIntro, shouldPlayIntro } from './intro'
+import { animateTitle } from './shared/title'
 
 const intro = isHome && shouldPlayIntro()
 
@@ -17,6 +18,7 @@ if (intro) {
 }
 
 render(<App />, document.getElementById('app')!)
+animateTitle(pageTitle)
 
 if (intro) {
   playIntro()

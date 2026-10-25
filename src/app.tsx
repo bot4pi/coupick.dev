@@ -7,6 +7,10 @@ const path = window.location.pathname.replace(/\/+$/, '') || '/'
 
 export const isHome = path === '/' || path === '/index.html'
 
+const gameNames: Record<string, string> = { '/snake': 'snake', '/blockblast': 'blockblast' }
+
+export const pageTitle = isHome ? 'coupick.dev' : `coupick.dev · ${gameNames[path] ?? 'not found'}`
+
 // the games are only downloaded when someone opens one
 const games: Record<string, () => Promise<{ default: ComponentType }>> = {
   '/snake': () => import('./pages/games/snake'),
@@ -25,12 +29,6 @@ const LazyPage = ({ load }: { load: () => Promise<{ default: ComponentType }> })
 
 export function App () {
   const game = games[path]
-
-  useEffect(() => {
-    if (!isHome && game === undefined) {
-      document.title = 'coupick.dev · not found'
-    }
-  }, [])
 
   if (isHome) {
     return <MainPage />

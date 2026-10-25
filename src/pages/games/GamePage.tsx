@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact'
-import { useEffect, useRef } from 'preact/hooks'
+import { useRef } from 'preact/hooks'
 
 import type { AsciiField } from '../../ascii'
 import { AsciiCanvas, SectionHead } from '../../components'
@@ -21,10 +21,6 @@ interface GamePageProps {
  */
 export const GamePage = ({ name, sub, ratio = 1, children }: GamePageProps) => {
   const field = useRef<AsciiField | null>(null)
-
-  useEffect(() => {
-    document.title = `coupick.dev · ${name}`
-  }, [])
 
   const burst = (x: number, y: number) => field.current?.ping(x, y, performance.now())
 
