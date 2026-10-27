@@ -39,6 +39,9 @@ interface WakaItem {
 interface WakaPublicStats {
   total_seconds?: number
   daily_average?: number
+  // the profile page counts time in the "Other" language too; total_seconds leaves it out
+  total_seconds_including_other_language?: number
+  daily_average_including_other_language?: number
   human_readable_range?: string
   languages?: (WakaItem & { percent?: number })[]
   editors?: WakaItem[]
@@ -123,8 +126,8 @@ const getPublicStats = async (username: string): Promise<CodingStats> => {
     ...empty(true),
     range: 'all-time',
     rangeLabel: data.human_readable_range?.toLowerCase() ?? null,
-    totalSeconds: Math.round(data.total_seconds ?? 0),
-    dailyAverageSeconds: Math.round(data.daily_average ?? 0),
+    totalSeconds: Math.round(data.total_seconds_including_other_language ?? data.total_seconds ?? 0),
+    dailyAverageSeconds: Math.round(data.daily_average_including_other_language ?? data.daily_average ?? 0),
     languages: (data.languages ?? []).filter(language => language.name !== 'Other').slice(0, 5).map(language => ({
       name: language.name,
       seconds: Math.round(language.total_seconds),
