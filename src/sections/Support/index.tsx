@@ -10,7 +10,7 @@ const EVM = '0x333056C542AA7Fe5D0fFF3b5c4e1474892d15E71'
 const TRON = 'TF6sD397HcWpFSEie61pZuKXQsn6youdAb'
 
 const coins: WalletInfo[] = [
-  { name: 'ton', coin: 'ton', address: 'UQALjyxuxzPuiVRiLg1zXpMShgcKjVmre5j-Jd6IRjT_COUP', label: '…_COUP' },
+  { name: 'ton', coin: 'ton', address: 'UQBUH8DbjFvdh8piy2DBPnk90NUcvG67u3eNKcqrLZI3coup', label: '…coup' },
   { name: 'btc', coin: 'btc', address: 'bc1q3cyqs6dhc4rynamc0rr6rkn28jmf68lcv860qt', label: 'bc1q…0qt' },
   { name: 'eth', coin: 'eth', address: EVM, label: '0x3330…' },
   { name: 'sol', coin: 'sol', address: 'EewZJfo2uX4SSRTeaqeFsr3BeHu5PVFuuAscceAE8MoB', label: 'EewZ…MoB' },
